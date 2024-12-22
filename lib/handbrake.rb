@@ -1,3 +1,7 @@
+require 'shellwords'
+require 'handbrake/presets'
+require 'handbrake/progress'
+
 module Handbrake
   class Transcoder
     attr_accessor :input_file, :output_file
@@ -13,16 +17,16 @@ module Handbrake
       @video_quality = 20
       @audio_encoder = 'ca_aac'
       @audio_quality = 160
-      @preset = 'Normal'
+      @preset = 'normal'
     end
 
     def transcode(&progress_block)
       validate_files!
       cmd = build_command
-      
+
       IO.popen(cmd) do |io|
         while line = io.gets
-          progress = Progress.new(line)
+          progress = Handbrake::Progress.new(line)
           progress_block.call(progress) if block_given?
         end
       end
@@ -40,13 +44,13 @@ module Handbrake
     private
 
     def validate_files!
-      raise "Input file not specified" unless @input_file
-      raise "Output file not specified" unless @output_file
-      raise "Input file does not exist" unless File.exist?(@input_file)
+      raise 'Input file not specified' unless @input_file
+      raise 'Output file not specified' unless @output_file
+      raise 'Input file does not exist' unless File.exist?(@input_file)
     end
 
     def build_command
-      cmd = ["HandBrakeCLI"]
+      cmd = ['HandBrakeCLI']
       cmd << "-i #{@input_file.shellescape}"
       cmd << "-o #{@output_file.shellescape}"
       cmd << "-e #{@video_encoder}" if @video_encoder
@@ -55,8 +59,8 @@ module Handbrake
       cmd << "-E #{@audio_encoder}" if @audio_encoder
       cmd << "-w #{@width}" if @width
       cmd << "-l #{@height}" if @height
-      cmd << "-Z #{@preset.shellescape}" if @preset
-      
+      cmd << "-Z #{Presets::AVAILABLE[@preset].shellescape}" if @preset
+
       cmd.join(' ')
     end
   end
