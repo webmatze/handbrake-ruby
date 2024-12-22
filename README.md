@@ -12,11 +12,11 @@ gem 'handbrake-ruby'
 
 And then execute:
 
-    $ bundle install
+    bundle install
 
 Or install it yourself as:
 
-    $ gem install handbrake-ruby
+    gem install handbrake-ruby
 
 ## Usage
 
@@ -48,7 +48,7 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/yourusername/handbrake-ruby.
+Bug reports and pull requests are welcome on GitHub at <https://github.com/webmatze/handbrake-ruby>.
 
 ## License
 
